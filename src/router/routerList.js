@@ -1,0 +1,23 @@
+export default [
+    {
+        path:"/",
+        name:"index",
+        component:()=>import("../pages/index.vue")
+    },
+    {
+        path:"/calendar",
+        name:"calendar",
+        component:()=>import('../components/calendar/calendar.vue'),
+        meta:{
+            title:"价格日历"
+        }
+    },
+    {
+        path:"/canvasImg",
+        name:"canvasImg",
+        component:()=>import('../components/canvasImg/canvasImg.vue'),
+        meta:{
+            title:"h5生成海报"
+        }
+    }
+]

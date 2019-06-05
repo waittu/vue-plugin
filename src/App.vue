@@ -1,14 +1,12 @@
 <template>
   <div id="app">
-    <calendar />
+    <router-view />
   </div>
 </template>
 
 <script>
-import calendar from "./components/calendar/calendar"
 export default {
   name: 'app',
-  components:{calendar}
 }
 </script>
 
