@@ -19,5 +19,13 @@ export default [
         meta:{
             title:"h5生成海报"
         }
+    },
+    {
+        path:"/debounce",
+        name:"debounce",
+        component:()=>import('../components/debounce/debounce.vue'),
+        meta:{
+            title:"防抖函数和截流函数"
+        }
     }
 ]

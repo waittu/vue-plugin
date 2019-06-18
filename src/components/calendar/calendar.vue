@@ -12,7 +12,8 @@
                     <li class="item" v-for="(day,index) in item.currentDay"
                         :key="index"
                         :class="{'current-month':day.currentMonth}"
-                        :style="isCrrentDay(item.year,item.month,day.value)" >
+                        @click="changeDay(day)"
+                        :style="isCrrentDay(day)" >
                         <div v-if="day.currentMonth">{{day.value}}</div>
                     </li>
                 </ul>
@@ -26,7 +27,7 @@ export default {
     data() {
         return {
             dateValue: "", // 输入框显示日期
-            date: new Date().getDate(), // 当前日期
+            currentDate: '', // 当前日期
             panelState: false, // 初始值，默认panel关闭
             tmpMonth: new Date().getMonth(), // 临时月份，可修改
             month: new Date().getMonth(),
@@ -41,7 +42,7 @@ export default {
                 { label: "周六", value: 6 }
             ], // 周
             list:[],
-            aroud:12,// 显示几个月
+            aroud:2,// 显示几个月
         }
     },
     created() {
@@ -56,7 +57,8 @@ export default {
             let dateList = Array.from({ length: currentMonthLength }, (val, index) => {
                     return {
                         currentMonth: true,
-                        value: index + 1
+                        value:index + 1,
+                        date:`${tmpYear}-${this.transformNumber(tmpMonth + 1)}-${this.transformNumber(index + 1)}`
                     };
                 }
             );
@@ -69,7 +71,8 @@ export default {
             for(let i=0;i<fistWeek;i++){
                 previousMonthDays.unshift({
                     currentMonth:false,
-                    value:previousMongthLength-i
+                    value:previousMongthLength-i,
+                    date:`${tmpYear}-${this.transformNumber(tmpMonth)}-${this.transformNumber(previousMongthLength-i)}`
                 })
             }
             // 在最后一天插入下月天数
@@ -78,11 +81,11 @@ export default {
             for(let i=0;i<42-dateList.length;i++){
                 nextMonthDays.push({
                     currentMonth:false,
-                    value:i+1
+                    value:i+1,
+                    date:`${tmpYear}-${tmpMonth>=11?'01':this.transformNumber(tmpMonth+2)}-${this.transformNumber(i+1)}`
                 })
             }
             return [...dateList,...nextMonthDays]
-
         },
         // 计算拿出需要显示的数据
         getMouthList(){
@@ -103,17 +106,36 @@ export default {
             }
         },
         // 当天样式显示
-        isCrrentDay(y,m,d){
-            let currentY = new Date().getFullYear()
-            let currentM = new Date().getMonth()
-            let currentD = new Date().getDate()
-            if(`${currentY}-${currentM}-${currentD}`===`${y}-${m}-${d}`){
+        isCrrentDay(day){
+            let currentDay = ''
+            if(this.currentDate){
+               currentDay =  this.currentDate
+            }else{
+                let currentY = new Date().getFullYear()
+                let currentM = new Date().getMonth()
+                let currentD = new Date().getDate()
+                currentDay = `${currentY}-${this.transformNumber(currentM+1)}-${this.transformNumber(currentD)}`
+            }
+            if(currentDay===day.date&&day['currentMonth']){
                 return {
                     backgroundColor:'#007fff',
                     color:"#ffffff",
                     borderRadius: "50%"
                 }
             }
+        },
+        // 换算
+        transformNumber(num){
+            if(parseInt(num)<10){
+                return `0${num}`
+            }else{
+                return num
+            }
+        },
+        // 时间改变
+        changeDay(day){
+            if(!day['currentMonth']){return}
+            this.currentDate = day.date
         }
     },
 }
